@@ -1,0 +1,32 @@
+name: Dart CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dart_style
+        run: dart pub global activate dart_style
+
+      - name: Check code format
+        run: dartfmt --set-exit-if-changed .
+
+      - name: Build and test
+        run: |
+          dart pub get
+          dart test
